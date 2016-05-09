@@ -1,8 +1,11 @@
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import static java.util.Comparator.reverseOrder;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 public class TopKFrequent {
   public static void main(String[] args) {
@@ -10,19 +13,15 @@ public class TopKFrequent {
   }
 
   public static List<Integer> topKFrequent(int[] nums, int k) {
-    List<Integer> myList = new ArrayList<>();
-    HashMap<Integer, Integer> map = new HashMap<>();
-
-    for (int n : nums) {
-      if (!map.containsKey(n)) map.put(n, 1);
-      else map.put(n, map.get(n) + 1);
-    }
-
-    map.entrySet().stream()
-      .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+    return Arrays
+      .stream(nums)
+      .boxed()
+      .collect(groupingBy(x -> x, counting()))
+      .entrySet()
+      .stream()
+      .sorted(comparingByValue(reverseOrder()))
       .limit(k)
-      .forEach((entry) -> myList.add(entry.getKey()));
-
-    return myList;
+      .map(Map.Entry::getKey)
+      .collect(toList());
   }
 }
