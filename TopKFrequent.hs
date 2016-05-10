@@ -6,4 +6,4 @@ import Data.Ord (comparing)
 
 topKFrequent :: [Int] -> Int -> [Int]
 topKFrequent xs k = take k $ reverse $ fst <$> sortBy (comparing snd) frequency
-  where frequency = toList (fromListWith (+) [(x, 1) | x <- xs])
+  where frequency = toList (fromListWith (+) [(x, 1 :: Int) | x <- xs])
