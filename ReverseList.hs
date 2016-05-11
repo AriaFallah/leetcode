@@ -27,7 +27,7 @@ foldListR f acc (Node x next) = f x (foldListR f acc next)
 
 foldListL :: (b -> a -> b) -> b -> LinkedList a -> b
 foldListL f z xs = foldListR step id xs z
-    where step x g a = g (f a x)
+    where step x g a = g $! f a x
 
 reverseList :: LinkedList a -> LinkedList a
 reverseList = foldListL addToList Empty
