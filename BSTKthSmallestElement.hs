@@ -9,7 +9,7 @@ testTree :: BinaryTree Int
 testTree =
   Node 10
   (Node 5
-    (Node 1 Leaf Leaf)
+    (Node 1 Leaf undefined)
     (Node 6 Leaf Leaf))
   (Node 40
     (Node 30 Leaf Leaf)
@@ -21,7 +21,7 @@ traverseTree f z = go
         go (Node v l r) = f v (go l) (go r)
 
 flatten :: BinaryTree a -> [a]
-flatten = traverseTree (\v left right -> left ++ [v] ++ right) []
+flatten t = traverseTree (\v l r -> l . (v:) . r) id t []
 
 kthSmallest :: Int -> BinaryTree a -> a
 kthSmallest k = last . take k . flatten
