@@ -1,0 +1,6 @@
+{
+  "extends": "aria",
+  "rules": {
+    "no-unused-vars": 0
+  }
+}

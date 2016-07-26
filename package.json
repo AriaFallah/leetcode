@@ -1,0 +1,24 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "description": "This is where I'll be putting problems from the site https://leetcode.com.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AriaFallah/leetcode.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AriaFallah/leetcode/issues"
+  },
+  "homepage": "https://github.com/AriaFallah/leetcode#readme",
+  "devDependencies": {
+    "eslint": "^3.1.1",
+    "eslint-config-aria": "^4.0.2"
+  }
+}
