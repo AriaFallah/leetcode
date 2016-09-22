@@ -1,7 +1,7 @@
 // https://leetcode.com/problems/h-index-ii/
 
-#import <vector>
-#import <iostream>
+#include <vector>
+#include <iostream>
 
 class Solution {
 public:

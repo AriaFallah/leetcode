@@ -1,8 +1,8 @@
 // https://leetcode.com/problems/h-index/
 
-#import <vector>
-#import <algorithm>
-#import <iostream>
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
 class Solution {
 public:

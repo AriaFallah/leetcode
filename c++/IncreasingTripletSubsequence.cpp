@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/increasing-triplet-subsequence/
 
-#import <vector>
+#include <vector>
 
 class Solution {
 public:
