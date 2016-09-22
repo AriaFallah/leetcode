@@ -22,7 +22,7 @@
   There are a total of 4 courses to take. To take course 3 you should 
   have finished both courses 1 and 2. Both courses 1 and 2 should be taken 
   after you finished course 0. So one correct course order is [0,1,2,3]. 
-  Another correct ordering is[0,2,1,3].
+  Another correct ordering is [0,2,1,3].
 */
 
 
@@ -30,57 +30,86 @@
 #include <utility>
 #include <iostream>
 #include <algorithm>
+#include <unordered_set>
 
 struct GraphNode {
-  int m_value;
-  bool visited;
-  std::vector<GraphNode*> m_edges;
-  explicit GraphNode(int value): m_value(value), visited(false), m_edges() {}
+  unsigned m_indegree;
+  std::unordered_set<int> m_edges;
+  GraphNode(): m_indegree(0), m_edges() {}
 };
 
 class Solution {
 public:
   std::vector<int> findOrder(int numCourses, std::vector<std::pair<int, int>>& prerequisites) const {
     std::vector<int> ordering;
-    std::vector<GraphNode*> graph(numCourses);
+    std::vector<int> topNodes;
+    std::vector<GraphNode*> graph(numCourses, nullptr);
 
-    // Construct a graph of the pairs
-    // [[1,0],[2,0],[3,1],[3,2]] -> [<1, 2>, <3>, <3>, <0>]
-    for (int i = 0; i < (int)prerequisites.size(); ++i) {
-      const auto& edge = prerequisites[i];
+    // Build a graph from the edges
+    for (size_t i = 0; i < prerequisites.size(); ++i) {
+      auto const& edge = prerequisites[i];
       
       if (graph[edge.first] == nullptr) {
-        graph[edge.first] = new GraphNode(edge.first);
+        graph[edge.first] = new GraphNode();
       } if (graph[edge.second] == nullptr) {
-        graph[edge.second] = new GraphNode(edge.second);
+        graph[edge.second] = new GraphNode();
       }
       
-      graph[edge.second]->m_edges.push_back(graph[edge.first]);
-    }
-
-    // Topologically sort the graph
-    for (int i = 0; i < numCourses; ++i) {
-      auto node = graph[i];
-      if (node) {
-        visit(node, ordering);
-      } else {
-        ordering.push_back(i);
+      auto& edges = graph[edge.second]->m_edges;
+      if (edges.find(edge.first) == edges.end()) {
+        edges.insert(edge.first);
+        graph[edge.first]->m_indegree++;
       }
     }
-    std::reverse(ordering.begin(), ordering.end());
 
-    // Clean up and return
-    for (auto& x : graph) delete x;
+    // Push edges with degree 0 into topNodes
+    for (int i = 0; i < numCourses; ++i) {
+      if (graph[i] == nullptr) ordering.push_back(i);
+      else if (graph[i]->m_indegree == 0) topNodes.push_back(i);
+    }
+
+    // Kahn's algorithm
+    while (topNodes.size() > 0) {
+      int const node = topNodes.back(); 
+      auto const& edges = graph[node]->m_edges;
+
+      topNodes.pop_back();
+      ordering.push_back(node);
+      for (int const node : edges) {
+        GraphNode* const g = graph[node];
+        g->m_indegree--;
+        if (g->m_indegree == 0) {
+          topNodes.push_back(node);
+        }
+      }
+    }
+
+    // If all nodes don't have a degree of 0 then there's a cycle
+    for (int i = 0; i < numCourses; ++i) {
+      if (graph[i] && graph[i]->m_indegree != 0) {
+        ordering = {};
+        break;
+      }
+    }
+
+    // Clean up memory and return
+    for (int i = 0; i < numCourses; ++i) {
+      if (graph[i] != nullptr) delete graph[i];
+    }
+    
     return ordering;
   }
-private:
-  void visit(GraphNode* node, std::vector<int>& ordering) const {
-    if (node->visited) return;
-    node->visited = true;
-    auto& edges = node->m_edges;
-    for (int i = 0; i < (int)edges.size(); ++i) {
-      visit(edges[i], ordering); 
-    }
-    ordering.push_back(node->m_value);
-  }
 };
+
+int main() {
+  Solution s;
+  std::pair<int, int> pair1 = std::make_pair(1, 0);
+  std::pair<int, int> pair2 = std::make_pair(2, 0);
+  
+  std::vector<std::pair<int,int>> vec = { pair1, pair2 };
+  auto ordering = s.findOrder(4, vec);
+  
+  std::cout << "RESULTS\n";
+  for (auto x : ordering)
+    std::cout << x << std::endl;
+}
