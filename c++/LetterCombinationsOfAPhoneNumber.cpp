@@ -14,9 +14,6 @@
 
 using std::vector;
 using std::string;
-using std::cout;
-using std::endl;
-
 
 class Solution {
 public:
@@ -38,7 +35,7 @@ public:
 
     for (char c : digits) {
       if (c >= '2' && c <= '9') {
-       sets.push_back(mappings[c - '0' - 2]); 
+        sets.push_back(mappings[c - '0' - 2]); 
       }
     }
 
@@ -61,7 +58,23 @@ private:
   }
 };
 
-int main() {
-  Solution s;
-  for (auto x : s.letterCombinations("")) cout << x << endl;
-}
+
+// Recursive solution
+class Solution2 {
+public:
+  vector<string> letterCombinations(string digits) {
+    vector<string> v;
+    search(digits, 0, "", v, digits.length());
+    return v;
+  }
+private:
+  string const digit_map[8]{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+  void search(const string& digits, unsigned pos, string path, vector<string>& v, size_t len) {
+    if (pos == len) return;
+    string s = digit_map[digits[pos] - '2'];
+    for (size_t i = 0, sLen = s.length(); i < sLen; ++i) {
+      if (pos == len - 1) v.push_back(path + s[i]);
+      else search(digits, pos + 1, path + s[i], v, len);
+    }
+  }
+};
