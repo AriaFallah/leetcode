@@ -1,21 +1,30 @@
-// https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+// https://leetcode.com/problems/reverse-linked-list/
+
+// Reverse a singly linked list.
 
 struct ListNode {
   int val;
   ListNode *next;
-  ListNode(int x) : val(x), next(0) {}
+  explicit ListNode(int x) : val(x), next(nullptr) {}
 };
 
 class Solution {
 public:
-  ListNode* deleteDuplicates(ListNode* head) {
-    if (!head || !head->next) return head;
-    if (head->val == head->next->val) {
-      head->next = head->next->next;
-      deleteDuplicates(head);
-    } else {
-      deleteDuplicates(head->next);
+  ListNode* reverseList(ListNode* head) {
+    if (!head) return nullptr;
+
+    ListNode* temp = nullptr;
+    ListNode* previous = head;
+    ListNode* current = head->next;
+    previous->next = nullptr;
+
+    while (current) {
+      temp = current;
+      current = current->next;
+      temp->next = previous;
+      previous = temp;
     }
-    return head;
+
+    return previous;
   }
 };
