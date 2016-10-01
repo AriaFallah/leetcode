@@ -14,42 +14,39 @@
 
 #include <string>
 #include <vector>
-#include <utility>
 #include <unordered_set>
-#include <unordered_map>
 
-using std::pair;
 using std::string;
 using std::vector;
 using std::unordered_set;
 
+// leet
+// false false false true
+
 class Solution {
 public:
   bool wordBreak(string s, unordered_set<string>& wordDict) {
-    return backTrack(s, 0, 0, wordDict, s.length());
-  }
-private:
-  vector<pair<unsigned, unsigned>> m_words;
+    vector<bool> dp(s.length() + 1, false);
+    dp.back() = true;
 
-  bool backTrack(string s, unsigned offset, unsigned pos, unordered_set<string>& d, size_t len) {
-    if (pos == len) {
-      if (m_words.size() > offset) {
-        auto const& p = m_words.back(); m_words.pop_back();
-        return backTrack(s, p.first, p.second + 1, d, len);
-      } else {
-        return false;
+    // Start at the second to last letter of the word
+    for (int offset = s.length() - 1; offset >= 0; offset--) {
+      
+      // Start at the offset, and increase substring length
+      for (size_t pos = offset, len = s.length(); pos < len; pos++) {
+        
+        // When you reach a previous word boundary, check if current substring is also a word
+        if (dp[pos + 1] == true && wordDict.find(s.substr(offset, pos + 1 - offset)) != wordDict.end()) {
+          
+          // Set position of first letter of word to true
+          dp[offset] = true;
+          break;
+        }
       }
     }
 
-    string sub = s.substr(offset, pos + 1 - offset);
-    if (d.find(sub) != d.end()) {
-      if (pos == len - 1) return true;
-      else {
-        m_words.push_back(std::make_pair(offset, pos));
-        return backTrack(s, pos + 1, pos + 1, d, len);
-      }
-    }
-
-    return backTrack(s, offset, pos + 1, d, len);
+    // If the first entry is true
+    // It means that there was a word before it (and a word before that word and so one)
+    return dp[0];
   }
 };
