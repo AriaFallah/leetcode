@@ -1,28 +1,48 @@
 // https://leetcode.com/problems/binary-tree-paths/
 
+/*
+  Given a binary tree, return all root-to-leaf paths.
+
+  For example, given the following binary tree:
+
+     1
+   /   \
+  2     3
+   \
+    5
+
+  All root-to-leaf paths are:
+  ["1->2->5", "1->3"]
+*/
+
+#include <vector>
+#include <string>
+
+using std::vector;
+using std::string;
+
 struct TreeNode {
   int val;
-  TreeNode* left;
-  TreeNode* right;
-  TreeNode(int x) : val(x), left(0), right(0) {}
+  TreeNode *left;
+  TreeNode *right;
+  explicit TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
-
-#include <string>
-#include <vector>
 
 class Solution {
 public:
-  std::vector<std::string> binaryTreePaths(TreeNode* root) {
-    std::vector<std::string> v;
-    constructPath(root, "", v);
-    return v;
+  vector<string> binaryTreePaths(TreeNode* root) {
+    if (!root) return {};
+    
+    vector<string> paths;
+    traverse(root, "", paths);
+    return paths;
   }
 private:
-  void constructPath(TreeNode* root, std::string s, std::vector<std::string>& v) {
-    if (!root) return;
-    if (!root->left && !root->right) v.push_back(s + std::to_string(root->val));
-
-    constructPath(root->left, s + std::to_string(root->val) + "->", v);
-    constructPath(root->right, s + std::to_string(root->val) + "->", v);
+  void traverse(TreeNode* t, string const& s, vector<string>& paths) {
+    if (!t->left && !t->right) {
+      return paths.push_back(s + std::to_string(t->val));
+    }
+    if (t->left) traverse(t->left, s + std::to_string(t->val) + "->", paths);
+    if (t->right) traverse(t->right, s + std::to_string(t->val) + "->", paths);
   }
 };
