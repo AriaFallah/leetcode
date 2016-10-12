@@ -17,11 +17,12 @@
 */
 
 #include <string>
-#include <iostream>
+
+using std::string;
 
 class Solution {
 public:
-  int numDecodings(std::string s) {
+  int numDecodings(string s) {
     if (s.empty() || s[0] == '0') return 0;
 
     int ways[3] = { 0, 1, 1 };
@@ -41,9 +42,3 @@ public:
     return ways[2];
   }    
 };
-
-int main() {
-  Solution s;
-  int result = s.numDecodings("1234");
-  std::cout << result << std::endl;
-}

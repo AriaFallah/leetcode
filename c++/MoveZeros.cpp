@@ -19,16 +19,13 @@
 class Solution {
 public:
   void moveZeroes(std::vector<int>& nums) {
-    size_t size = nums.size();
-    if (size < 2) return;
+    if (nums.size() < 2) return;
     
-    unsigned p1 = 0;
-    unsigned p2 = 1;
-    
-    for (;;) {
+    int p1 = 0, p2 = 1;
+    while (true) {
       while (nums[p1] != 0) p1++;
       while (nums[p2] == 0 || p2 < p1) p2++;
-      if (p2 < size) std::swap(nums[p1++], nums[p2++]);
+      if (p2 < (int)nums.size()) std::swap(nums[p1++], nums[p2++]);
       else break;
     }
   }

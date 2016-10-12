@@ -16,15 +16,18 @@
 #include <vector>
 #include <unordered_map>
 
+using std::vector;
+using std::unordered_map;
+
 class Solution {
 public:
-  std::vector<int> twoSum(std::vector<int>& nums, int target) {
-    std::unordered_map<int, unsigned> m;
+  vector<int> twoSum(vector<int>& nums, int target) {
+    unordered_map<int, int> m;
     
-    for (size_t i = 0, len = nums.size(); i < len; ++i) m[nums[i]] = i; 
-    for (size_t i = 0, len = nums.size(); i < len; ++i) {
+    for (int i = 0, len = nums.size(); i < len; ++i) m[nums[i]] = i; 
+    for (int i = 0, len = nums.size(); i < len; ++i) {
       int x = target - nums[i];
-      if (m.find(x) != m.end() && m[x] != i) return { (int)i, (int)m[x] };
+      if (m.find(x) != m.end() && m[x] != i) return { i, m[x] };
     }
     return {};
   }

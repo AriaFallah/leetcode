@@ -1,7 +1,5 @@
 // https://leetcode.com/problems/add-binary/
 
-#include <string>
-
 /*
   Given two binary strings, return their sum (also a binary string).
 
@@ -11,11 +9,15 @@
   Return "100".
 */
 
+#include <string>
+
+using std::string;
+
 class Solution {
 public:
-  std::string addBinary(std::string a, std::string b) {
+  string addBinary(string a, string b) {
     int carry = 0;
-    std::string s = "";
+    string s = "";
     int num1 = a.size() - 1;
     int num2 = b.size() - 1;
     
@@ -26,7 +28,7 @@ public:
       // Add a[num2] to carry. If num2 dips below 0, add 0
       carry += num2 >= 0 ? b[num2--] - '0' : 0;
 
-      // Append carry % 2 to the end of the string
+      // Append carry % 2 to the front of the string
       s = char(carry % 2 + '0') + s;
 
       // If carry is 2 sets it to 1 and otherwise 0

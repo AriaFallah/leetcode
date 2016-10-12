@@ -69,7 +69,7 @@ public:
   }
 private:
   string const digit_map[8]{"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-  void search(const string& digits, unsigned pos, string path, vector<string>& v, size_t len) {
+  void search(const string& digits, int pos, string path, vector<string>& v, int len) {
     if (pos == len) return;
     string s = digit_map[digits[pos] - '2'];
     for (size_t i = 0, sLen = s.length(); i < sLen; ++i) {
